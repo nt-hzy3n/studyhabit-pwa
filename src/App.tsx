@@ -13,7 +13,7 @@ import { questionRepository } from './db/repositories/questionRepository';
 import { surveyRepository } from './db/repositories/surveyRepository';
 import { networkService } from './services/network/networkService';
 import { syncManager } from './services/sync/SyncManager';
-import { WifiOff, CheckCircle2, HardDrive } from 'lucide-react';
+import { WifiOff, CheckCircle2, HardDrive, Smartphone, Download, X } from 'lucide-react';
 
 export function App() {
   const [currentTab, setCurrentTab] = useState<NavTab>('dashboard');
@@ -24,6 +24,8 @@ export function App() {
   const [isOnline, setIsOnline] = useState(networkService.getStatus());
   const [pendingCount, setPendingCount] = useState(0);
   const [submitToast, setSubmitToast] = useState<{ title: string; message: string; isOffline: boolean } | null>(null);
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [isInstalled, setIsInstalled] = useState(false);
 
   useEffect(() => {
     const unsubNet = networkService.subscribe((online) => setIsOnline(online));
@@ -31,11 +33,33 @@ export function App() {
       setPendingCount(state.pendingCount);
     });
 
+    const installHandler = (e: Event) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    };
+
+    window.addEventListener('beforeinstallprompt', installHandler);
+
+    window.addEventListener('appinstalled', () => {
+      setIsInstalled(true);
+      setDeferredPrompt(null);
+    });
+
     return () => {
       unsubNet();
       unsubSync();
+      window.removeEventListener('beforeinstallprompt', installHandler);
     };
   }, []);
+
+  const handleInstallApp = async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') {
+      setDeferredPrompt(null);
+    }
+  };
 
   const handleStartSurvey = async (survey: Survey, draftResponseId?: string) => {
     try {
@@ -107,6 +131,65 @@ export function App() {
               <div style={{ fontWeight: 800, fontSize: '0.88rem' }}>{submitToast.title}</div>
               <div style={{ fontSize: '0.8rem', opacity: 0.95, marginTop: '2px' }}>{submitToast.message}</div>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* PWA Mobile Install Banner */}
+      {deferredPrompt && !isInstalled && (
+        <div
+          style={{
+            background: 'linear-gradient(135deg, #0284c7 0%, #0369a1 100%)',
+            color: 'white',
+            padding: '10px 16px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '12px',
+            fontSize: '0.86rem',
+            boxShadow: '0 2px 8px rgba(2, 132, 199, 0.25)',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Smartphone size={18} />
+            <span>
+              <strong>Cài đặt PWA:</strong> Thêm StudyHabit vào màn hình chính để dùng offline mượt mà!
+            </span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+            <button
+              onClick={handleInstallApp}
+              style={{
+                background: 'white',
+                color: '#0284c7',
+                border: 'none',
+                padding: '5px 12px',
+                borderRadius: '6px',
+                fontWeight: 700,
+                fontSize: '0.8rem',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px',
+              }}
+            >
+              <Download size={14} />
+              Cài đặt ngay
+            </button>
+            <button
+              onClick={() => setDeferredPrompt(null)}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                color: 'white',
+                cursor: 'pointer',
+                opacity: 0.8,
+                padding: '4px',
+              }}
+              title="Đóng"
+            >
+              <X size={16} />
+            </button>
           </div>
         </div>
       )}
