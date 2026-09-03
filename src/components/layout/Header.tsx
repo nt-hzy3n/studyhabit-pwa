@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { GraduationCap, Wifi, WifiOff, RefreshCw, AlertCircle, Settings } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { GraduationCap, Wifi, WifiOff, RefreshCw, AlertCircle, Settings, Smartphone } from 'lucide-react';
 import { networkService } from '../../services/network/networkService';
 import { syncManager } from '../../services/sync/SyncManager';
 
 interface HeaderProps {
   onOpenSettings: () => void;
+  onOpenInstall: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ onOpenSettings }) => {
+export const Header: React.FC<HeaderProps> = ({ onOpenSettings, onOpenInstall }) => {
   const [isOnline, setIsOnline] = useState(networkService.getStatus());
   const [syncState, setSyncState] = useState({
     isSyncing: false,
@@ -90,6 +91,30 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSettings }) => {
             <span>Online — Sẵn sàng</span>
           </div>
         )}
+
+        {/* Install PWA Button */}
+        <button
+          className="btn-outline"
+          onClick={onOpenInstall}
+          title="Cài đặt ứng dụng PWA lên điện thoại/máy tính"
+          style={{
+            border: 'none',
+            background: 'var(--primary-light)',
+            color: 'var(--primary)',
+            padding: '6px 10px',
+            borderRadius: 'var(--radius-sm)',
+            cursor: 'pointer',
+            minHeight: '34px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '5px',
+            fontSize: '0.78rem',
+            fontWeight: 700,
+          }}
+        >
+          <Smartphone size={16} />
+          <span>Cài đặt PWA</span>
+        </button>
 
         {/* Settings button */}
         <button

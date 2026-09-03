@@ -24,11 +24,13 @@ import {
 interface DashboardPageProps {
   onStartSurvey: (survey: Survey) => void;
   onNavigateTab: (tab: 'dashboard' | 'surveys' | 'responses' | 'builder') => void;
+  onOpenInstall?: () => void;
 }
 
 export const DashboardPage: React.FC<DashboardPageProps> = ({
   onStartSurvey,
   onNavigateTab,
+  onOpenInstall,
 }) => {
   const [metrics, setMetrics] = useState<StudyHabitMetrics>({
     totalSubmitted: 0,
@@ -107,24 +109,45 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
           Thu thập dữ liệu thực địa ngoại tuyến (Offline-First) về thời gian tự học, phương pháp tiếp thu, công nghệ AI và giấc ngủ sinh viên. An toàn 100% không mất dữ liệu.
         </p>
 
-        <button
-          type="button"
-          className="btn"
-          style={{
-            background: 'white',
-            color: '#0369a1',
-            fontWeight: 700,
-            fontSize: '0.88rem',
-            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-          }}
-          onClick={() => {
-            if (studyHabitSurvey) onStartSurvey(studyHabitSurvey);
-          }}
-        >
-          <GraduationCap size={18} />
-          <span>Bắt đầu điền phiếu khảo sát</span>
-          <ArrowRight size={16} />
-        </button>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+          <button
+            type="button"
+            className="btn"
+            style={{
+              background: 'white',
+              color: '#0369a1',
+              fontWeight: 700,
+              fontSize: '0.88rem',
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+            }}
+            onClick={() => {
+              if (studyHabitSurvey) onStartSurvey(studyHabitSurvey);
+            }}
+          >
+            <GraduationCap size={18} />
+            <span>Bắt đầu điền phiếu khảo sát</span>
+            <ArrowRight size={16} />
+          </button>
+
+          {onOpenInstall && (
+            <button
+              type="button"
+              className="btn"
+              style={{
+                background: 'rgba(255, 255, 255, 0.2)',
+                color: 'white',
+                border: '1px solid rgba(255, 255, 255, 0.4)',
+                fontWeight: 600,
+                fontSize: '0.84rem',
+                backdropFilter: 'blur(4px)',
+              }}
+              onClick={onOpenInstall}
+            >
+              <Smartphone size={16} />
+              <span>📱 Cài đặt ứng dụng (PWA)</span>
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Sync Metrics 4-Box Grid */}

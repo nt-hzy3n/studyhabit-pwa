@@ -8,6 +8,7 @@ import { ResponseHistoryPage } from './pages/ResponseHistoryPage';
 import { SurveyBuilderPage } from './pages/SurveyBuilderPage';
 import { MultiStepSurveyForm } from './components/survey/MultiStepSurveyForm';
 import { SettingsModal } from './components/modals/SettingsModal';
+import { InstallModal } from './components/modals/InstallModal';
 import type { Survey, Question, SurveyResponse } from './types/survey';
 import { questionRepository } from './db/repositories/questionRepository';
 import { surveyRepository } from './db/repositories/surveyRepository';
@@ -21,6 +22,7 @@ export function App() {
   const [activeQuestions, setActiveQuestions] = useState<Question[]>([]);
   const [activeDraftResponseId, setActiveDraftResponseId] = useState<string | undefined>(undefined);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isInstallModalOpen, setIsInstallModalOpen] = useState(false);
   const [isOnline, setIsOnline] = useState(networkService.getStatus());
   const [pendingCount, setPendingCount] = useState(0);
   const [submitToast, setSubmitToast] = useState<{ title: string; message: string; isOffline: boolean } | null>(null);
@@ -110,7 +112,10 @@ export function App() {
   return (
     <>
       {/* Top Header */}
-      <Header onOpenSettings={() => setIsSettingsOpen(true)} />
+      <Header
+        onOpenSettings={() => setIsSettingsOpen(true)}
+        onOpenInstall={() => setIsInstallModalOpen(true)}
+      />
 
       {/* Persistent Offline Warning Banner */}
       {!isOnline && (
@@ -214,6 +219,7 @@ export function App() {
               <DashboardPage
                 onStartSurvey={(s) => handleStartSurvey(s)}
                 onNavigateTab={(tab) => setCurrentTab(tab)}
+                onOpenInstall={() => setIsInstallModalOpen(true)}
               />
             )}
 
@@ -255,6 +261,14 @@ export function App() {
       <SettingsModal
         isOpen={isSettingsOpen}
         onClose={() => setIsSettingsOpen(false)}
+      />
+
+      {/* Install PWA Guide Modal */}
+      <InstallModal
+        isOpen={isInstallModalOpen}
+        onClose={() => setIsInstallModalOpen(false)}
+        onTriggerNativeInstall={handleInstallApp}
+        canInstallNatively={!!deferredPrompt && !isInstalled}
       />
     </>
   );
