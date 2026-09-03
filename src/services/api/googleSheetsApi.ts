@@ -19,8 +19,11 @@ export const googleSheetsApi = {
       const stored = localStorage.getItem(STORAGE_KEY_GAS_URL);
       if (stored && stored.trim() !== '') return stored.trim();
     }
-    // Fallback to Vite environment variable
-    return (import.meta.env.VITE_GOOGLE_APPS_SCRIPT_URL || '').trim();
+    // Fallback to Vite environment variable or default deployed Google Apps Script
+    return (
+      import.meta.env.VITE_GOOGLE_APPS_SCRIPT_URL ||
+      'https://script.google.com/macros/s/AKfycbzqem92riSe8oh1MeYFvuKAoxT5g8NwccfeCAlXq_idID-x2uT-k4QmZXCU7kF_1qFE/exec'
+    ).trim();
   },
 
   setDeploymentUrl(url: string): void {
