@@ -7,8 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
-    "preview": "vite preview",
-    "deploy": "wrangler pages deploy dist --project-name=studyhabit"
+    "preview": "npm run build && wrangler dev",
+    "deploy": "npm run build && wrangler deploy"
   },
   "dependencies": {
     "@capacitor/android": "^8.5.1",
@@ -22,6 +22,7 @@
   },
   "devDependencies": {
     "@capacitor/cli": "^8.5.1",
+    "@cloudflare/vite-plugin": "^1.54.3",
     "@types/node": "^24.13.3",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.4",
