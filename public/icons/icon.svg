@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0284c7" />
+      <stop offset="100%" stop-color="#0369a1" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="16" flood-color="#000000" flood-opacity="0.3" />
+    </filter>
+  </defs>
+  
+  <!-- Rounded Base Canvas -->
+  <rect width="512" height="512" rx="112" fill="url(#grad)" />
+  
+  <!-- Clipboard Body -->
+  <rect x="116" y="128" width="280" height="300" rx="24" fill="#ffffff" filter="url(#shadow)" />
+  
+  <!-- Clipboard Clip -->
+  <rect x="186" y="96" width="140" height="64" rx="16" fill="#0f172a" />
+  <circle cx="256" cy="128" r="14" fill="#38bdf8" />
+  
+  <!-- Content Lines -->
+  <rect x="156" y="196" width="120" height="18" rx="9" fill="#0284c7" />
+  <rect x="156" y="234" width="200" height="14" rx="7" fill="#cbd5e1" />
+  <rect x="156" y="266" width="160" height="14" rx="7" fill="#cbd5e1" />
+  
+  <!-- Offline-to-Cloud Sync Badge (Bottom Right) -->
+  <circle cx="346" cy="376" r="62" fill="#0284c7" stroke="#ffffff" stroke-width="8" filter="url(#shadow)" />
+  <!-- Checkmark / Sync icon -->
+  <path d="M322 376 L340 394 L374 358" fill="none" stroke="#ffffff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
