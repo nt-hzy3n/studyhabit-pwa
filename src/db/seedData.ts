@@ -3,19 +3,24 @@ import {
   studyHabitSurvey,
   studyHabitQuestions,
   campusEnvironmentSurvey,
+  facilityInspectionSurvey,
+  facilityInspectionQuestions,
   STUDY_HABIT_SURVEY_ID,
   CAMPUS_SURVEY_ID,
+  FACILITY_INSPECTION_SURVEY_ID,
 } from '../data/studyHabitSurvey';
 
-export { STUDY_HABIT_SURVEY_ID, CAMPUS_SURVEY_ID };
+export { STUDY_HABIT_SURVEY_ID, CAMPUS_SURVEY_ID, FACILITY_INSPECTION_SURVEY_ID };
 
 export const defaultSurveys: Survey[] = [
   studyHabitSurvey,
+  facilityInspectionSurvey,
   campusEnvironmentSurvey,
 ];
 
 export const defaultQuestions: Question[] = [
   ...studyHabitQuestions,
+  ...facilityInspectionQuestions,
   // Sample questions for campus environment survey to prove multi-survey platform capability
   {
     id: 'ce-q1',

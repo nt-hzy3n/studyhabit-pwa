@@ -1,8 +1,10 @@
 {
-  "name": "StudyHabit",
+  "name": "StudyHabit — VKU Field Survey",
   "short_name": "StudyHabit",
   "description": "Ứng dụng khảo sát thói quen học tập của sinh viên ngoại tuyến (offline-first PWA)",
+  "id": "/",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#0284c7",

@@ -28,6 +28,7 @@ export function App() {
   const [submitToast, setSubmitToast] = useState<{ title: string; message: string; isOffline: boolean } | null>(null);
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [isInstalled, setIsInstalled] = useState(false);
+  const [isInstallBannerDismissed, setIsInstallBannerDismissed] = useState(false);
 
   useEffect(() => {
     const unsubNet = networkService.subscribe((online) => setIsOnline(online));
@@ -140,60 +141,68 @@ export function App() {
         </div>
       )}
 
-      {/* PWA Mobile Install Banner */}
-      {deferredPrompt && !isInstalled && (
+      {/* PWA Mobile Install Banner - Always visible until dismissed or installed */}
+      {!isInstalled && !isInstallBannerDismissed && (
         <div
           style={{
             background: 'linear-gradient(135deg, #0284c7 0%, #0369a1 100%)',
             color: 'white',
-            padding: '10px 16px',
+            padding: '12px 16px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
             gap: '12px',
-            fontSize: '0.86rem',
-            boxShadow: '0 2px 8px rgba(2, 132, 199, 0.25)',
+            fontSize: '0.88rem',
+            boxShadow: '0 2px 10px rgba(2, 132, 199, 0.3)',
+            zIndex: 99,
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Smartphone size={18} />
+            <Smartphone size={20} />
             <span>
-              <strong>Cài đặt PWA:</strong> Thêm StudyHabit vào màn hình chính để dùng offline mượt mà!
+              <strong>Cài đặt lên Android:</strong> Thêm StudyHabit vào màn hình chính để dùng offline mượt mà!
             </span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
             <button
-              onClick={handleInstallApp}
+              onClick={() => {
+                if (deferredPrompt) {
+                  handleInstallApp();
+                } else {
+                  setIsInstallModalOpen(true);
+                }
+              }}
               style={{
                 background: 'white',
                 color: '#0284c7',
                 border: 'none',
-                padding: '5px 12px',
+                padding: '6px 14px',
                 borderRadius: '6px',
                 fontWeight: 700,
-                fontSize: '0.8rem',
+                fontSize: '0.82rem',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '4px',
+                boxShadow: '0 2px 5px rgba(0,0,0,0.15)',
               }}
             >
               <Download size={14} />
               Cài đặt ngay
             </button>
             <button
-              onClick={() => setDeferredPrompt(null)}
+              onClick={() => setIsInstallBannerDismissed(true)}
               style={{
                 background: 'transparent',
                 border: 'none',
                 color: 'white',
                 cursor: 'pointer',
-                opacity: 0.8,
+                opacity: 0.85,
                 padding: '4px',
               }}
               title="Đóng"
             >
-              <X size={16} />
+              <X size={18} />
             </button>
           </div>
         </div>
