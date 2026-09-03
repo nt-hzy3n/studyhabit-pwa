@@ -8,7 +8,7 @@
 
 ## 1. GENERAL INFORMATION & DELIVERABLE LINKS
 * **Team Members:**
-  1. Nguyễn Thị Huyền — Student ID: 22ITxxx — Role: Full-stack Mobile & Offline-First Architecture — Contribution: 100%
+  1. Nguyễn Thị Huyền — Student ID: 23IT110 — Role: Full-stack Mobile & Offline-First Architecture — Contribution: 100%
 * **🔗 Live Demo URL:** [https://studyhabit-1ip.pages.dev](https://studyhabit-1ip.pages.dev) *(Triển khai HTTPS trực tiếp trên Cloudflare Pages)*
 * **💻 GitHub Repository:** [https://github.com/nt-hzy3n/studyhabit-pwa](https://github.com/nt-hzy3n/studyhabit-pwa)
 * **🎥 Video Demo (Interactive PWA Demo):** [https://studyhabit-1ip.pages.dev](https://studyhabit-1ip.pages.dev) *(Trải nghiệm trực tiếp và giả lập chế độ Offline qua DevTools / ngắt kết nối thiết bị)*

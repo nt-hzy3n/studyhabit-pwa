@@ -11,7 +11,7 @@
 ## 1. THÔNG TIN CHUNG & LIÊN KẾT BÀI NỘP (GENERAL INFORMATION & DELIVERABLES)
 
 * **Thành viên nhóm:**
-  1. Nguyễn Thị Huyền — Mã sinh viên: 22ITxxx — Vai trò: Full-stack Mobile & Kiến trúc Offline-First — Mức độ đóng góp: 100%
+  1. Nguyễn Thị Huyền — Mã sinh viên: 23IT110 — Vai trò: Full-stack Mobile & Kiến trúc Offline-First — Mức độ đóng góp: 100%
 * **🌐 Live Demo URL:** [https://studyhabit-1ip.pages.dev](https://studyhabit-1ip.pages.dev) *(Triển khai HTTPS trực tiếp trên Cloudflare Pages)*
 * **💻 GitHub Repository:** [https://github.com/nt-hzy3n/studyhabit-pwa](https://github.com/nt-hzy3n/studyhabit-pwa)
 * **🎥 Video Demo / Trải nghiệm tương tác:** [https://studyhabit-1ip.pages.dev](https://studyhabit-1ip.pages.dev) *(Hỗ trợ kiểm thử Offline trực tiếp qua DevTools hoặc ngắt mạng thiết bị)*
