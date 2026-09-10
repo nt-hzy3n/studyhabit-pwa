@@ -1,10 +1,12 @@
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { Capacitor } from '@capacitor/core';
+import { storageService } from '../filesystem/storageService';
 
 export interface CapturedImage {
   dataUrl: string; // Base64 data URL ready to store or display
   mimeType: string;
   sizeBytes: number;
+  localFilePath?: string;
 }
 
 export const cameraService = {
@@ -24,10 +26,14 @@ export const cameraService = {
         });
 
         if (image.dataUrl) {
+          // Persist photo to device filesystem locally before sync (Slide 10)
+          const fileInfo = await storageService.savePhotoLocally(image.dataUrl);
+
           return {
             dataUrl: image.dataUrl,
             mimeType: `image/${image.format || 'jpeg'}`,
             sizeBytes: Math.round((image.dataUrl.length * 3) / 4),
+            localFilePath: fileInfo.filePath,
           };
         }
       } catch (err: any) {

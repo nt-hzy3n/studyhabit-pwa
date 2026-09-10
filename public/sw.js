@@ -1,4 +1,4 @@
-const CACHE_NAME = 'studyhabit-v2';
+const CACHE_NAME = 'studyhabit-v3';
 
 // Static App Shell assets to pre-cache on install
 const PRECACHE_ASSETS = [

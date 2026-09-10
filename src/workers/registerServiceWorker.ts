@@ -1,7 +1,19 @@
+import { Capacitor } from '@capacitor/core';
 import { syncManager } from '../services/sync/SyncManager';
 
 export function registerServiceWorker() {
   if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+    if (Capacitor.isNativePlatform()) {
+      // On native Android/iOS, assets are loaded directly from local APK assets.
+      // Unregister any stale service workers to ensure fresh code execution.
+      navigator.serviceWorker.getRegistrations().then((registrations) => {
+        for (const registration of registrations) {
+          registration.unregister();
+        }
+      });
+      return;
+    }
+
     window.addEventListener('load', () => {
       navigator.serviceWorker
         .register('/sw.js')

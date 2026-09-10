@@ -1,8 +1,8 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.studyhabit.survey',
-  appName: 'StudyHabit',
+  appId: 'com.vku.fieldsurvey',
+  appName: 'StudyHabit Field Survey',
   webDir: 'dist',
   server: {
     androidScheme: 'https',
@@ -11,7 +11,14 @@ const config: CapacitorConfig = {
     Camera: {
       presentationStyle: 'fullscreen',
     },
-    Network: {},
+    LocalNotifications: {
+      smallIcon: 'ic_launcher',
+      iconColor: '#0284c7',
+      sound: 'beep.wav',
+    },
+    PushNotifications: {
+      presentationOptions: ['badge', 'sound', 'alert'],
+    },
   },
 };
 

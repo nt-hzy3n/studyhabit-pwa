@@ -101,6 +101,17 @@ export const facilityInspectionQuestions: Question[] = [
     type: 'photo',
     required: false,
   },
+  {
+    id: 'fi-q8',
+    surveyId: FACILITY_INSPECTION_SURVEY_ID,
+    order: 8,
+    step: 3,
+    title: 'Tọa độ GPS hiện trường kiểm tra (@capacitor/geolocation)',
+    label: 'Tọa độ GPS hiện trường',
+    description: 'Ghi nhận tọa độ GPS thực tế của thiết bị phòng học để đối chiếu kiểm tra thực địa',
+    type: 'location',
+    required: false,
+  },
 ];
 
 export const studyHabitSurvey: Survey = {
@@ -427,6 +438,17 @@ export const studyHabitQuestions: Question[] = [
     label: 'Ảnh góc học tập',
     description: 'Chụp hoặc tải lên hình ảnh bàn học, góc thư viện hoặc ghi chú học tập yêu thích của bạn',
     type: 'photo',
+    required: false,
+  },
+  {
+    id: 'sh-q22',
+    surveyId: STUDY_HABIT_SURVEY_ID,
+    order: 22,
+    step: 5,
+    title: 'Vị trí địa lý không gian tự học (GPS Geolocation):',
+    label: 'Tọa độ GPS không gian học',
+    description: 'Xác định vị trí GPS thực tế nơi bạn thường ngồi tự học (@capacitor/geolocation)',
+    type: 'location',
     required: false,
   },
 ];

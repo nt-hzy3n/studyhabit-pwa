@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import type { Question } from '../../types/survey';
-import { Star, Camera, X, Check, Loader2 } from 'lucide-react';
+import { Star, Camera, X, Check, Loader2, MapPin, Navigation, RefreshCw } from 'lucide-react';
 import { cameraService } from '../../services/camera/cameraService';
+import { locationService } from '../../services/location/locationService';
 
 export interface QuestionRendererProps {
   question: Question;
@@ -18,6 +19,8 @@ export const QuestionRenderer: React.FC<QuestionRendererProps> = ({
 }) => {
   const [capturing, setCapturing] = useState(false);
   const [cameraError, setCameraError] = useState<string | null>(null);
+  const [locating, setLocating] = useState(false);
+  const [locationError, setLocationError] = useState<string | null>(null);
 
   const handlePhotoCapture = async () => {
     if (disabled || capturing) return;
@@ -32,6 +35,26 @@ export const QuestionRenderer: React.FC<QuestionRendererProps> = ({
       }
     } finally {
       setCapturing(false);
+    }
+  };
+
+  const handleLocationCapture = async () => {
+    if (disabled || locating) return;
+    setLocating(true);
+    setLocationError(null);
+    try {
+      const loc = await locationService.getCurrentPosition();
+      onChange({
+        latitude: loc.latitude,
+        longitude: loc.longitude,
+        accuracy: loc.accuracy,
+        formatted: loc.formatted,
+        timestamp: loc.timestamp,
+      });
+    } catch (err: any) {
+      setLocationError(err.message || 'Không thể xác định tọa độ GPS');
+    } finally {
+      setLocating(false);
     }
   };
 
@@ -263,6 +286,164 @@ export const QuestionRenderer: React.FC<QuestionRendererProps> = ({
             {cameraError && (
               <p style={{ fontSize: '0.8rem', color: 'var(--status-failed)', marginTop: '6px' }}>
                 {cameraError}
+              </p>
+            )}
+          </div>
+        );
+
+      case 'location':
+        const locValue = typeof value === 'object' && value !== null ? value : null;
+        return (
+          <div>
+            {locValue ? (
+              <div
+                style={{
+                  background: 'var(--card-bg, #ffffff)',
+                  border: '1px solid var(--border-color, #e2e8f0)',
+                  borderRadius: '10px',
+                  padding: '14px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '10px',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div
+                      style={{
+                        width: '36px',
+                        height: '36px',
+                        borderRadius: '8px',
+                        background: 'rgba(2, 132, 199, 0.12)',
+                        color: '#0284c7',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <MapPin size={20} />
+                    </div>
+                    <div>
+                      <div style={{ fontWeight: 700, fontSize: '0.9rem', color: 'var(--text-main)' }}>
+                        Đã xác định tọa độ GPS
+                      </div>
+                      <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
+                        Độ chính xác: ±{locValue.accuracy || '0'}m (Vệ tinh GPS)
+                      </div>
+                    </div>
+                  </div>
+                  {!disabled && (
+                    <div style={{ display: 'flex', gap: '6px' }}>
+                      <button
+                        type="button"
+                        onClick={handleLocationCapture}
+                        title="Đo lại tọa độ GPS"
+                        style={{
+                          background: 'none',
+                          border: '1px solid var(--border-color, #cbd5e1)',
+                          borderRadius: '6px',
+                          padding: '6px',
+                          cursor: 'pointer',
+                          color: 'var(--text-main)',
+                        }}
+                      >
+                        <RefreshCw size={14} className={locating ? 'spin-animation' : ''} />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => onChange(null)}
+                        title="Xóa tọa độ"
+                        style={{
+                          background: 'none',
+                          border: '1px solid #fca5a5',
+                          borderRadius: '6px',
+                          padding: '6px',
+                          cursor: 'pointer',
+                          color: '#ef4444',
+                        }}
+                      >
+                        <X size={14} />
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                <div
+                  style={{
+                    background: 'var(--bg-subtle, #f8fafc)',
+                    borderRadius: '6px',
+                    padding: '8px 12px',
+                    fontFamily: 'monospace',
+                    fontSize: '0.84rem',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                  }}
+                >
+                  <span>Lat: <strong>{typeof locValue.latitude === 'number' ? locValue.latitude.toFixed(6) : locValue.latitude}</strong></span>
+                  <span>Lng: <strong>{typeof locValue.longitude === 'number' ? locValue.longitude.toFixed(6) : locValue.longitude}</strong></span>
+                </div>
+
+                {locValue.latitude && locValue.longitude && (
+                  <a
+                    href={`https://www.google.com/maps?q=${locValue.latitude},${locValue.longitude}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                      fontSize: '0.78rem',
+                      color: '#0284c7',
+                      textDecoration: 'none',
+                      fontWeight: 600,
+                      alignSelf: 'flex-start',
+                    }}
+                  >
+                    <Navigation size={12} />
+                    Xem trên Google Maps
+                  </a>
+                )}
+              </div>
+            ) : (
+              <div>
+                <button
+                  type="button"
+                  onClick={handleLocationCapture}
+                  disabled={disabled || locating}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '8px',
+                    width: '100%',
+                    padding: '12px 16px',
+                    border: '1.5px dashed #0284c7',
+                    borderRadius: '8px',
+                    background: 'rgba(2, 132, 199, 0.05)',
+                    color: '#0284c7',
+                    fontWeight: 600,
+                    fontSize: '0.9rem',
+                    cursor: disabled ? 'not-allowed' : 'pointer',
+                  }}
+                >
+                  {locating ? (
+                    <>
+                      <Loader2 size={18} className="spin-animation" />
+                      <span>Đang kết nối vệ tinh GPS thiết bị...</span>
+                    </>
+                  ) : (
+                    <>
+                      <MapPin size={18} />
+                      <span>Lấy tọa độ GPS hiện trường (@capacitor/geolocation)</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            )}
+            {locationError && (
+              <p style={{ fontSize: '0.8rem', color: 'var(--status-failed)', marginTop: '6px' }}>
+                {locationError}
               </p>
             )}
           </div>

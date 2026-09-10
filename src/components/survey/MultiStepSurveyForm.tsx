@@ -191,6 +191,20 @@ export const MultiStepSurveyForm: React.FC<MultiStepSurveyFormProps> = ({
 
     setIsSubmitting(true);
     try {
+      // Extract GPS location coordinates if present in answers
+      let responseLocation = undefined;
+      for (const q of questions) {
+        if (q.type === 'location' && answers[q.id]) {
+          responseLocation = {
+            latitude: answers[q.id].latitude,
+            longitude: answers[q.id].longitude,
+            accuracy: answers[q.id].accuracy,
+            timestamp: answers[q.id].timestamp || Date.now(),
+          };
+          break;
+        }
+      }
+
       const now = new Date().toISOString();
       const finalResponse: SurveyResponse = {
         id: responseId,
@@ -202,6 +216,7 @@ export const MultiStepSurveyForm: React.FC<MultiStepSurveyFormProps> = ({
         createdAt: now,
         updatedAt: now,
         retryCount: 0,
+        location: responseLocation,
       };
 
       // 1. ALWAYS save response locally first to IndexedDB
@@ -395,6 +410,10 @@ export const MultiStepSurveyForm: React.FC<MultiStepSurveyFormProps> = ({
                       {q.type === 'photo' && answerVal ? (
                         <div style={{ marginTop: '6px', maxWidth: '160px', borderRadius: 'var(--radius-sm)', overflow: 'hidden' }}>
                           <img src={answerVal} alt="Ảnh minh chứng" style={{ width: '100%', display: 'block' }} />
+                        </div>
+                      ) : q.type === 'location' && answerVal ? (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#0284c7', fontWeight: 600 }}>
+                          <span>📍 {answerVal.formatted || `Lat: ${answerVal.latitude?.toFixed(6)}, Lng: ${answerVal.longitude?.toFixed(6)}`}</span>
                         </div>
                       ) : q.type === 'rating' && answerVal ? (
                         <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>

@@ -133,6 +133,7 @@ export const SurveyBuilderPage: React.FC<SurveyBuilderPageProps> = ({
     { type: 'date', label: 'Ngày tháng' },
     { type: 'time', label: 'Thời gian' },
     { type: 'photo', label: 'Ảnh chụp / Camera' },
+    { type: 'location', label: 'Vị trí GPS Hiện trường' },
   ];
 
   return (

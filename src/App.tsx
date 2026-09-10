@@ -14,6 +14,7 @@ import { questionRepository } from './db/repositories/questionRepository';
 import { surveyRepository } from './db/repositories/surveyRepository';
 import { networkService } from './services/network/networkService';
 import { syncManager } from './services/sync/SyncManager';
+import { notificationService } from './services/notification/notificationService';
 import { WifiOff, CheckCircle2, HardDrive, Smartphone, Download, X } from 'lucide-react';
 
 export function App() {
@@ -31,6 +32,9 @@ export function App() {
   const [isInstallBannerDismissed, setIsInstallBannerDismissed] = useState(false);
 
   useEffect(() => {
+    // Initialize notification channels (Push & Local Notifications)
+    notificationService.init();
+
     const unsubNet = networkService.subscribe((online) => setIsOnline(online));
     const unsubSync = syncManager.subscribe((state) => {
       setPendingCount(state.pendingCount);

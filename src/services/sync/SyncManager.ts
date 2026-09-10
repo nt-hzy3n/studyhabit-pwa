@@ -2,6 +2,7 @@ import { syncQueueRepository } from '../../db/repositories/syncQueueRepository';
 import { responseRepository } from '../../db/repositories/responseRepository';
 import { googleSheetsApi } from '../api/googleSheetsApi';
 import { networkService } from '../network/networkService';
+import { notificationService } from '../notification/notificationService';
 
 export type SyncStatusListener = (state: {
   isSyncing: boolean;
@@ -166,6 +167,13 @@ class SyncManager {
           });
           await syncQueueRepository.markFailed(item.id, errorMsg);
         }
+      }
+
+      if (succeeded > 0) {
+        // Trigger Native/Push Notification alert for sync success (Slide 12: Item 4)
+        notificationService.sendSyncSuccessAlert(succeeded).catch((e) => {
+          console.warn('[SyncManager] Failed to trigger notification alert:', e);
+        });
       }
     } finally {
       this.isSyncing = false;
